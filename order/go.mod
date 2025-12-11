@@ -7,6 +7,7 @@ require (
 	google.golang.org/grpc v1.77.0
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gorm v1.31.1
+    github.com/agu3des/microservices-proto/golang/payment v0.0.0-00010101000000-000000000000
 )
 
 require (
@@ -19,4 +20,8 @@ require (
 	golang.org/x/text v0.30.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251022142026-3a174f9686a8 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
+)
+
+replace (
+    github.com/agu3des/microservices-proto/golang/payment=> ../../microservices-proto/golang/payment
 )
