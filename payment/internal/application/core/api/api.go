@@ -3,8 +3,8 @@ package api
 import (
 	"context"
 
-	"github.com/huseyinbabal/microservices/payment/internal/application/core/domain"
-	"github.com/huseyinbabal/microservices/payment/internal/ports"
+	"github.com/agu3des/microservices/payment/internal/application/core/domain"
+	"github.com/agu3des/microservices/payment/internal/ports"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

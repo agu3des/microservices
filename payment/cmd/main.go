@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/huseyinbabal/microservices/payment/config"
-	"github.com/huseyinbabal/microservices/payment/internal/adapters/db"
-	"github.com/huseyinbabal/microservices/payment/internal/adapters/grpc"
-	"github.com/huseyinbabal/microservices/payment/internal/application/core/api"
+	"github.com/agu3des/microservices/payment/config"
+	"github.com/agu3des/microservices/payment/internal/adapters/db"
+	"github.com/agu3des/microservices/payment/internal/adapters/grpc"
+	"github.com/agu3des/microservices/payment/internal/application/core/api"
 	log "github.com/sirupsen/logrus"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"
