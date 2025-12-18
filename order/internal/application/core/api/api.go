@@ -1,4 +1,3 @@
-
 package api
 
 import (
@@ -18,8 +17,13 @@ func NewApplication(db ports.DBPort, payment ports.PaymentPort) *Application {
 	}
 }
 
-func (a *Application) PlaceOrder(order domain.Order) (domain.Order, error) {
-	err := a.db.Save(&order)
+func (a *Application) PlaceOrder(customerId int64, orderItems []domain.OrderItem) (domain.Order, error) {
+	order, err := domain.NewOrder(customerId, orderItems)
+	if err != nil {
+		return domain.Order{}, err
+	}
+
+	err = a.db.Save(&order)
 	if err != nil {
 		return domain.Order{}, err
 	}

@@ -11,7 +11,9 @@ import (
 	"github.com/agu3des/microservices/order/internal/application/core/domain"
 	"github.com/agu3des/microservices/order/internal/ports"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
 
 type Adapter struct {
@@ -26,7 +28,7 @@ func NewAdapter(api ports.APIPort, port int) *Adapter {
 
 func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) (*order.CreateOrderResponse, error) {
 	var orderItems []domain.OrderItem
-	
+
 	for _, orderItem := range request.OrderItems {
 		orderItems = append(orderItems, domain.OrderItem{
 			ProductCode: orderItem.ProductCode,
@@ -35,11 +37,15 @@ func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) 
 		})
 	}
 
-	newOrder := domain.NewOrder(int64(request.CostumerId), orderItems)
-	
+	newOrder := domain.NewOrder(int64(request.UserId), orderItems)
+
 	result, err := a.api.PlaceOrder(newOrder)
 	if err != nil {
-		return nil, err
+		if err.Error() == "pedido não pode ter mais de 50 itens no total" {
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
+		
+		return nil, status.Error(codes.Internal, "failed to process order")
 	}
 
 	return &order.CreateOrderResponse{OrderId: int32(result.ID)}, nil

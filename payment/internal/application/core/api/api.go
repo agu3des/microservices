@@ -23,9 +23,11 @@ func (a Application) Charge(ctx context.Context, payment domain.Payment) (domain
 	if payment.TotalPrice > 1000 {
 		return domain.Payment{}, status.Errorf(codes.InvalidArgument, "Payment over 1000 is not allowed.")
 	}
+
 	err := a.db.Save(ctx, &payment)
 	if err != nil {
 		return domain.Payment{}, err
 	}
+
 	return payment, nil
 }

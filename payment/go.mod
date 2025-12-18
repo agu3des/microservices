@@ -1,9 +1,10 @@
 module github.com/agu3des/microservices/payment
 
-go 1.25.1
+go 1.25.1 // Ajuste para sua versão instalada se necessário
 
 require (
-	github.com/agu3des/microservices-proto/golang v0.0.0
+	// Importa o módulo específico de PAGAMENTO
+	github.com/agu3des/microservices-proto/golang/payment v0.0.0-00010101000000-000000000000
 	github.com/sirupsen/logrus v1.9.0
 	github.com/uptrace/opentelemetry-go-extra/otelgorm v0.3.2
 	go.opentelemetry.io/otel v1.38.0
@@ -33,4 +34,4 @@ require (
 	google.golang.org/protobuf v1.36.10 // indirect
 )
 
-replace github.com/agu3des/microservices-proto/golang => ../../microservices-proto/golang
+replace github.com/agu3des/microservices-proto/golang/payment => ../../microservices-proto/golang/payment
