@@ -37,15 +37,13 @@ func (a Adapter) Create(ctx context.Context, request *order.CreateOrderRequest) 
 		})
 	}
 
-	newOrder := domain.NewOrder(int64(request.UserId), orderItems)
+	result, err := a.api.PlaceOrder(int64(request.CostumerId), orderItems)
 
-	result, err := a.api.PlaceOrder(newOrder)
 	if err != nil {
-		if err.Error() == "pedido não pode ter mais de 50 itens no total" {
+		if err.Error() == "orders cannot have more than 50 items in total" {
 			return nil, status.Error(codes.InvalidArgument, err.Error())
 		}
-		
-		return nil, status.Error(codes.Internal, "failed to process order")
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &order.CreateOrderResponse{OrderId: int32(result.ID)}, nil
@@ -63,6 +61,8 @@ func (a Adapter) Run() {
 	if config.GetEnv() == "development" {
 		reflection.Register(grpcServer)
 	}
+
+	log.Printf("Starting Order Service on port %d...", a.port)
 
 	if err := grpcServer.Serve(listen); err != nil {
 		log.Fatalf("failed to serve grpc on port")

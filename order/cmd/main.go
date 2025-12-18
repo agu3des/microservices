@@ -7,7 +7,7 @@ import (
 	"github.com/agu3des/microservices/order/internal/adapters/db"
 	"github.com/agu3des/microservices/order/internal/adapters/grpc"
 	
-	payment_adapter "github.com/agu3des/microservices/order/internal/adapters/payment"
+	"github.com/agu3des/microservices/order/internal/adapters/payment"
 	"github.com/agu3des/microservices/order/internal/application/core/api"
 )
 
@@ -17,7 +17,7 @@ func main() {
 		log.Fatalf("Failed to connect to database. Error: %v", err)
 	}
 
-	payAdapter, err := payment_adapter.NewAdapter(config.GetPaymentServiceUrl())
+	payAdapter, err := payment.NewAdapter(config.GetPaymentServiceUrl())
 	if err != nil {
 		log.Fatalf("Failed to initialize payment stub. Error: %v", err)
 	}

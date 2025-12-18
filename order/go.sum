@@ -1,7 +1,5 @@
 filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
 filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
-github.com/agu3des/microservices-proto/golang/order v0.0.0-20251211213123-96a22993a7c8 h1:QIpnuLsOSVHJNZ9ZOkaDgXbk5+xDEDvHU6SZD5mSzsw=
-github.com/agu3des/microservices-proto/golang/order v0.0.0-20251211213123-96a22993a7c8/go.mod h1:JLFwCOmAf3r/3SMUIE95GLKcOrW3WmQdQfq4mvZW6G0=
 github.com/go-logr/logr v1.4.3 h1:CjnDlHq8ikf6E492q6eKboGOC0T8CDaOvkHCIg8idEI=
 github.com/go-logr/logr v1.4.3/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
 github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=

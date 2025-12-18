@@ -3,5 +3,5 @@ package ports
 import "github.com/agu3des/microservices/order/internal/application/core/domain"
 
 type APIPort interface {
-	PlaceOrder (order domain.Order) (domain.Order, error)
+	PlaceOrder(customerId int64, orderItems []domain.OrderItem) (domain.Order, error)
 }

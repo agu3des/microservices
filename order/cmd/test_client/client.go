@@ -6,7 +6,6 @@ import (
 	"log"
 	"time"
 
-	// Importação baseada no seu script 'run' (MODULE_PATH)
 	"github.com/agu3des/microservices-proto/golang/order"
 	
 	"google.golang.org/grpc"
@@ -49,7 +48,7 @@ func criarPedido(client order.OrderClient, quantidade int32, preco float32) {
 
 	// Simulando um request
 	req := &order.CreateOrderRequest{
-		UserId: 1001, // ID do usuário
+		CostumerId: 1001, // ID do usuário
 		OrderItems: []*order.OrderItem{
 			{
 				ProductCode: "PROD-TEST-01",
