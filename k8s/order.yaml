@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: order
+  ports:
+    - protocol: TCP
+      port: 3000        
+      targetPort: 3000  
+  type: NodePort        
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+      - name: order
+        image: order:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        env:
+          - name: APPLICATION_PORT
+            value: "3000"
+          - name: ENV
+            value: "prod"
+          - name: DATA_SOURCE_URL
+            value: "root:root@tcp(mysql-service:3306)/order?charset=utf8mb4&parseTime=True&loc=Local"
+          - name: PAYMENT_SERVICE_URL
+            value: "payment-service:50051"
+          - name: SHIPPING_SERVICE_URL
+            value: "shipping-service:50052"

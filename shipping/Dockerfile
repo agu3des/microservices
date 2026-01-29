@@ -11,8 +11,12 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o server cmd/main.go
 
+
 FROM scratch
 
 COPY --from=builder /app/server /server
+
+
+EXPOSE 50052
 
 ENTRYPOINT ["/server"]

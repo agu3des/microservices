@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/agu3des/microservices/shipping/internal/application/core/domain"
-	"github.com/agu3des/microservices/shipping/internal/ports"
 )
 
 type Application struct {

@@ -67,6 +67,15 @@ func (a Adapter) Get(id string) (domain.Order, error) {
 	return order, res.Error
 }
 
+func (a Adapter) ProductExists(code string) (bool, error) {
+	var count int64
+	err := a.db.Table("products").Where("code = ?", code).Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
 func (a Adapter) Save(order *domain.Order) error {
 	var orderItems []OrderItem
 	for _, orderItem := range order.OrderItems {

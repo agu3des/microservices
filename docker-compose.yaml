@@ -1,15 +1,60 @@
-version: '3.8'
-
 services:
+  # --- Banco de Dados ---
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
     container_name: microservices_db
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+
+  # --- Microsserviço de Pagamento ---
+  payment:
+    build: ./payment
+    container_name: service_payment
+    ports:
+      - "50051:50051"
+    environment:
+      APPLICATION_PORT: 50051
+      DATA_SOURCE_URL: "root:root@tcp(mysql:3306)/payment"
+      ENV: "prod"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # --- Microsserviço de Entrega ---
+  shipping:
+    build: ./shipping
+    container_name: service_shipping
+    ports:
+      - "50052:50052"
+    environment:
+      APPLICATION_PORT: 50052
+      ENV: "prod"
+  order:
+    build: ./order
+    container_name: service_order
+    ports:
+      - "3000:3000"
+    environment:
+      APPLICATION_PORT: 3000
+      DATA_SOURCE_URL: "root:root@tcp(mysql:3306)/order"
+      PAYMENT_SERVICE_URL: "payment:50051"
+      SHIPPING_SERVICE_URL: "shipping:50052"
+      ENV: "prod"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      payment:
+        condition: service_started
+      shipping:
+        condition: service_started
 
 volumes:
-  db_data:
+  mysql_data:
