@@ -1,49 +1,53 @@
 package shipping
 
 import (
-	"context"
-	"fmt"
-	"github.com/agu3des/microservices-proto/golang/shipping"
-	"github.com/agu3des/microservices/order/internal/application/core/domain"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+    "context"
+    "fmt"
+
+    "github.com/agu3des/microservices-proto/golang/shipping"
+    "github.com/agu3des/microservices/order/internal/application/core/domain"
+    "google.golang.org/grpc"
+    "google.golang.org/grpc/credentials/insecure"
 )
 
 type Adapter struct {
-	shippingURL string
+    shippingServiceUrl string
 }
 
-func NewAdapter(url string) *Adapter {
-	return &Adapter{shippingURL: url}
+func NewAdapter(shippingServiceUrl string) (*Adapter, error) {
+    return &Adapter{shippingServiceUrl: shippingServiceUrl}, nil
 }
 
-func (a *Adapter) Ship(order domain.Order) error {
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	conn, err := grpc.NewClient(a.shippingURL, opts...)
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
+func (a *Adapter) Ship(order *domain.Order) error {
+    var opts []grpc.DialOption
+    opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
-	client := shipping.NewShippingClient(conn)
+    conn, err := grpc.NewClient(a.shippingServiceUrl, opts...)
+    if err != nil {
+        return err
+    }
+    defer conn.Close()
 
-	var items []*shipping.ShippingItem
-	for _, i := range order.OrderItems {
-		items = append(items, &shipping.ShippingItem{
-			ProductCode: i.ProductCode,
-			Quantity:    i.Quantity,
-		})
-	}
+    client := shipping.NewShippingClient(conn)
 
-	resp, err := client.Create(context.Background(), &shipping.CreateShippingRequest{
-		OrderId: order.ID,
-		Items:   items,
-	})
+    var items []*shipping.ShippingItem
+    for _, item := range order.OrderItems {
+        items = append(items, &shipping.ShippingItem{
+            ProductCode: item.ProductCode,
+            Quantity:    item.Quantity,
+        })
+    }
 
-	if err != nil {
-		return fmt.Errorf("erro no envio: %v", err)
-	}
+    resp, err := client.Create(context.Background(), &shipping.CreateShippingRequest{
+        OrderId: order.ID,
+        Items:   items,
+    })
 
-	fmt.Printf("Envio processado! Prazo: %d dias para o pedido %d\n", resp.DeliveryDays, order.ID)
-	return nil
+    if err != nil {
+        return fmt.Errorf("erro no serviço de shipping: %v", err)
+    }
+
+    order.DeliveryDays = resp.DeliveryDays
+    
+    return nil
 }

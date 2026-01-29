@@ -53,10 +53,9 @@ func (a Application) PlaceOrder(customerId int64, orderItems []domain.OrderItem)
 	}
 
 	// 5. Processa Envio 
-	err = a.shipping.Ship(newOrder)
+	err = a.shipping.Ship(&newOrder) 
 	if err != nil {
 		return domain.Order{}, fmt.Errorf("pagamento realizado, mas falha ao solicitar envio: %v", err)
 	}
-
 	return newOrder, nil
 }

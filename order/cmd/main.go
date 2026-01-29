@@ -52,7 +52,10 @@ func main() {
 	}
 
 	// 4. Inicializar Adapter de Envio/Shipping (gRPC Client)
-	shippingAdapter := shipping.NewAdapter(shippingServiceUrl)
+	shippingAdapter, err := shipping.NewAdapter(shippingServiceUrl)
+    if err != nil {
+        log.Fatalf("Falha ao conectar no serviço de shipping: %v", err)
+    }
 
 	// 5. Inicializar o Core da Aplicação (Injeção de Dependência)
 	application := api.NewApplication(dbAdapter, paymentAdapter, shippingAdapter)

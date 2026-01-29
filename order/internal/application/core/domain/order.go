@@ -11,6 +11,7 @@ type Order struct {
 	Status     string
 	OrderItems []OrderItem
 	TotalPrice float32 
+	DeliveryDays int32
 	CreatedAt  int64
 }
 
