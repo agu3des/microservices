@@ -1,16 +1,41 @@
 package domain
 
+import "errors"
+
+type Shipping struct {
+	OrderID           int64
+	Items             []ShippingItem
+	EstimatedDelivery int32
+}
+
 type ShippingItem struct {
 	ProductCode string
 	Quantity    int32
 }
 
-func CalculateDays(items []ShippingItem) int32 {
-	totalQty := int32(0)
-	for _, item := range items {
-		totalQty += item.Quantity
+func NewShipping(orderID int64, items []ShippingItem) (Shipping, error) {
+	if len(items) == 0 {
+		return Shipping{}, errors.New("a remessa deve conter itens")
 	}
-	// Lógica: 1 dia base + (total / 5)
-	// Em Go, divisão de inteiros já arredonda para baixo (floor), que é o comportamento desejado aqui para somar dias completos
-	return 1 + (totalQty / 5)
+
+	days := CalculateDays(items)
+
+	return Shipping{
+		OrderID:           orderID,
+		Items:             items,
+		EstimatedDelivery: days,
+	}, nil
+}
+
+func CalculateDays(items []ShippingItem) int32 {
+	totalQuantity := 0
+	for _, item := range items {
+		if item.Quantity > 0 {
+			totalQuantity += int(item.Quantity)
+		}
+	}
+	days := 1
+	extraDays := totalQuantity / 5
+	
+	return int32(days + extraDays)
 }

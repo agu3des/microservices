@@ -21,7 +21,7 @@ func NewApplication(db ports.DBPort) *Application {
 
 func (a Application) Charge(ctx context.Context, payment domain.Payment) (domain.Payment, error) {
 	if payment.TotalPrice > 1000 {
-		return domain.Payment{}, status.Errorf(codes.InvalidArgument, "Payment over 1000 is not allowed.")
+		return domain.Payment{}, status.Errorf(codes.InvalidArgument, "Pagamentos acima de 1000 reais não são permitidos.")
 	}
 
 	err := a.db.Save(ctx, &payment)
